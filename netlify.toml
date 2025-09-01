@@ -39,7 +39,7 @@
 
 # Function timeout for serverless functions (if needed)
 [functions]
-  timeout = 30
+  node_bundler = "esbuild"
 
 # Form handling (if needed for contact forms)
 [build.processing]
