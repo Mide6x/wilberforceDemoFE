@@ -60,7 +60,7 @@ export default function RoomPage() {
   useEffect(() => {
     if (!roomExists) return;
 
-    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'https://wilberforcedemobe.onrender.com';
     const newSocket = io(socketUrl);
 
     newSocket.on('connect', () => {
@@ -99,61 +99,94 @@ export default function RoomPage() {
     };
   }, [roomCode, language, roomExists]);
 
-  // Speech recognition for preachers using Web Speech API
+  // Audio recording with fallback for iOS/Safari compatibility
   const startRecording = async () => {
     try {
-      // Check if Web Speech API is supported
-      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        setError('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+      // Try Web Speech API first (Chrome/Edge)
+      if (('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        
+        recognition.onstart = () => {
+          setIsRecording(true);
+          if (socket) {
+            socket.emit('start-transcription', { roomCode });
+          }
+        };
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        recognition.onresult = (event: any) => {
+          let finalTranscript = '';
+          
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
+            }
+          }
+          
+          if (finalTranscript && socket) {
+            socket.emit('transcript-text', { roomCode, text: finalTranscript });
+          }
+        };
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setError(`Speech recognition error: ${event.error}`);
+        };
+        
+        recognition.onend = () => {
+          setIsRecording(false);
+        };
+        
+        mediaRecorderRef.current = recognition;
+        recognition.start();
         return;
       }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
       
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
+      // Fallback to MediaRecorder for iOS/Safari and other browsers
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+          ? 'audio/webm;codecs=opus' 
+          : MediaRecorder.isTypeSupported('audio/mp4') 
+          ? 'audio/mp4' 
+          : 'audio/webm'
+      });
       
-      recognition.onstart = () => {
+      mediaRecorderRef.current = mediaRecorder;
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0 && socket) {
+          // Convert blob to array buffer and send to server
+          event.data.arrayBuffer().then(buffer => {
+            socket.emit('audio-chunk', { roomCode, audioData: buffer });
+          });
+        }
+      };
+      
+      mediaRecorder.onstart = () => {
         setIsRecording(true);
         if (socket) {
           socket.emit('start-transcription', { roomCode });
         }
       };
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognition.onresult = (event: any) => {
-        let finalTranscript = '';
-        
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
-        }
-        
-        if (finalTranscript && socket) {
-          // Send transcript text to server for translation
-          socket.emit('transcript-text', { roomCode, text: finalTranscript });
-        }
-      };
-      
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognition.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        setError(`Speech recognition error: ${event.error}`);
-      };
-      
-      recognition.onend = () => {
+      mediaRecorder.onstop = () => {
         setIsRecording(false);
+        stream.getTracks().forEach(track => track.stop());
       };
       
-      mediaRecorderRef.current = recognition;
-      recognition.start();
+      mediaRecorder.start(1000); // Send chunks every second
       
-    } catch {
-      setError('Failed to start speech recognition. Please check permissions.');
+    } catch (error) {
+      console.error('Recording error:', error);
+      setError('Failed to access microphone. Please check permissions and try again.');
     }
   };
 
