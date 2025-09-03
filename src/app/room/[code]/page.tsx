@@ -137,8 +137,8 @@ export default function RoomPage() {
         }
       };
       
-      // Send audio chunks every 3 seconds for better context preservation
-      mediaRecorder.start(3000);
+      // Send audio chunks every 2 seconds for real-time processing
+      mediaRecorder.start(2000);
       
     } catch (error) {
       console.error('Recording error:', error);
