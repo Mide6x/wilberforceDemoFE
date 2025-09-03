@@ -52,8 +52,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f3fad7' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f1419' },
+    { media: '(prefers-color-scheme: light)', color: '#fbf3e3' },
+    { media: '(prefers-color-scheme: dark)', color: '#2d2c2a' },
   ],
   colorScheme: 'light dark',
 };
@@ -76,8 +76,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Wilberforce Academy" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#f3fad7" />
-        <meta name="theme-color" content="#f3fad7" />
+        <meta name="msapplication-TileColor" content="#fbf3e3" />
+        <meta name="theme-color" content="#fbf3e3" />
       </head>
       <body
         className={`${manrope.variable} antialiased h-full bg-gradient-to-br from-green-50 to-blue-50`}

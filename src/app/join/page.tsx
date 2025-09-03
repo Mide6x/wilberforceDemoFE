@@ -45,22 +45,22 @@ export default function JoinRoom() {
               </svg>
             </Link>
             <div className="mb-4">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 rounded-full flex items-center justify-center shadow-lg" style={{background: 'linear-gradient(135deg, #f98355 0%, #9ca4c3 100%)'}}>
                 <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                 </svg>
               </div>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-xl sm:text-2xl font-bold mb-2" style={{color: '#2d2c2a'}}>
               Join a Room
             </h1>
-            <p className="text-sm sm:text-base text-gray-600 px-2">
+            <p className="text-sm sm:text-base px-2" style={{color: '#2d2c2a'}}>
               Enter the room code to listen to the sermon
             </p>
           </div>
           <form onSubmit={handleJoinRoom} className="space-y-5 sm:space-y-6">
               <div>
-                <label htmlFor="roomCode" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="roomCode" className="block text-sm font-medium mb-2" style={{color: '#2d2c2a'}}>
                   Room Code
                 </label>
                 <input
@@ -78,7 +78,7 @@ export default function JoinRoom() {
               </div>
 
               <div>
-                <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="language" className="block text-sm font-medium mb-2" style={{color: '#2d2c2a'}}>
                   Preferred Language
                 </label>
                 <SearchableDropdown
@@ -91,7 +91,7 @@ export default function JoinRoom() {
                   placeholder="Search and select your language..."
                   className="w-full"
                 />
-                <p className="text-xs text-gray-500 mt-2 px-1">
+                <p className="text-xs mt-2 px-1" style={{color: '#2d2c2a'}}>
                   The sermon will be translated to your selected language
                 </p>
               </div>
@@ -109,10 +109,10 @@ export default function JoinRoom() {
 
               <button
                 type="submit"
-                disabled={loading || !roomCode.trim()}
+                disabled={isLoading || !roomCode.trim()}
                 className="wilberforce-btn-primary w-full py-4 sm:py-4 px-4 rounded-lg font-semibold text-base flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
               >
-                {loading ? (
+                {isLoading ? (
                   <>
                     <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -132,18 +132,17 @@ export default function JoinRoom() {
             </form>
             
             <div className="mt-6 pt-5 border-t">
-              <div className="text-center text-xs sm:text-sm text-gray-500">
+              <div className="text-center text-xs sm:text-sm" style={{color: '#2d2c2a'}}>
                 <p className="font-medium mb-2">Need help?</p>
                 <ul className="text-xs space-y-1 px-2">
                   <li>• Ask the preacher for the room code</li>
                   <li>• Room codes are usually 8 characters long</li>
-                  <li>• Make sure you're connected to the internet</li>
+                  <li>• Make sure you&apos;re connected to the internet</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }

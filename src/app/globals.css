@@ -2,31 +2,31 @@
 
 :root {
   /* Wilberforce Academy Creative Night color palette */
-  --background: #f3fad7;
-  --foreground: #1a1a1a;
-  --primary: #22c55e;
-  --secondary: #3b82f6;
-  --accent: #10b981;
-  --muted: #6b7280;
-  --border: #e5e7eb;
+  --background: #fbf3e3;
+  --foreground: #2d2c2a;
+  --primary: #f98355;
+  --secondary: #d9b78c;
+  --accent: #9ca4c3;
+  --muted: #8f5e49;
+  --border: #d9b78c;
   --card: #ffffff;
-  --card-foreground: #374151;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --card-foreground: #2d2c2a;
+  --success: #f98355;
+  --warning: #d9b78c;
+  --error: #f98355;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f1419;
-    --foreground: #f8f9fa;
-    --primary: #22c55e;
-    --secondary: #3b82f6;
-    --accent: #10b981;
-    --muted: #9ca3af;
-    --border: #374151;
-    --card: #1f2937;
-    --card-foreground: #f9fafb;
+    --background: #2d2c2a;
+    --foreground: #fbf3e3;
+    --primary: #f98355;
+    --secondary: #d9b78c;
+    --accent: #9ca4c3;
+    --muted: #8f5e49;
+    --border: #8f5e49;
+    --card: #3a3937;
+    --card-foreground: #fbf3e3;
   }
 }
 
@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Wilberforce Academy Creative Night theme */
 .wilberforce-gradient {
-  background: linear-gradient(135deg, #f3fad7 0%, #e8f5e8 50%, #f0f8f0 100%);
+  background: linear-gradient(135deg, #fbf3e3 0%, #f5ede0 50%, #f0e8dc 100%);
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport height for mobile */
 }
@@ -91,12 +91,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .wilberforce-btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 8px 20px rgba(249, 131, 85, 0.3);
 }
 
 .wilberforce-btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 4px 10px rgba(249, 131, 85, 0.2);
 }
 
 /* Mobile-specific optimizations */
