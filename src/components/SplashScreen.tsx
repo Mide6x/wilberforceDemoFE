@@ -87,6 +87,12 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             ></div>
           ))}
         </div>
+        {/* Footer */}
+        <div className="text-center mt-7">
+          <p className="text-xs sm:text-sm font-medium" style={{color: '#2d2c2a'}}>
+            Designed & Built with ❤️ by Olumide Adewole.
+          </p>
+        </div>
       </div>
     </div>
   );

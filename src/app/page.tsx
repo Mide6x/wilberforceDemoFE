@@ -97,7 +97,7 @@ export default function Home() {
         {/* Footer */}
         <div className="text-center">
           <p className="text-xs sm:text-sm font-medium" style={{color: '#2d2c2a'}}>
-            Built with ❤️ by Olumide Adewole
+            Designed & Built with ❤️ by <a href="https://omide.netlify.app/" target="_blank" rel="noopener noreferrer" style={{color: '#f98355'}}>Olumide Adewole</a>
           </p>
         </div>
       </div>
