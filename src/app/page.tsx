@@ -20,7 +20,7 @@ export default function Home() {
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="text-center space-y-3 sm:space-y-4">
-💕         
+      
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight" style={{color: '#2d2c2a'}}>
             Wilberforce Academy
           </h1>
@@ -68,8 +68,8 @@ export default function Home() {
           </div>
 
           <div className="text-center border-t pt-5 sm:pt-6">
-            <p className="font-medium mb-2 text-sm sm:text-base" style={{color: '#2d2c2a'}}>How it works</p>
-            <p className="text-xs sm:text-sm leading-relaxed px-2" style={{color: '#2d2c2a'}}>
+            <p className="font-medium mb-2 text-sm sm:text-base" style={{color: '#ffffff'}}>How it works</p>
+            <p className="text-xs sm:text-sm leading-relaxed px-2" style={{color: '#ffffff'}}>
               Preachers create rooms and share codes with listeners for real-time transcription in multiple languages
             </p>
           </div>
@@ -78,8 +78,8 @@ export default function Home() {
         {/* Footer */}
         <div className="text-center">
           <p className="text-xs sm:text-sm font-medium" style={{color: '#2d2c2a'}}>
-             Powered by OpenAI Whisper & Advanced Translation
-           </p>
+            Built with ❤️ by Olumide Adewole
+          </p>
         </div>
       </div>
     </div>

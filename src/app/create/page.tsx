@@ -79,7 +79,7 @@ export default function CreateRoom() {
             <button
               onClick={handleCreateRoom}
               disabled={isLoading}
-              className="btn-primary w-full py-5 px-8 rounded-xl font-semibold text-lg flex items-center justify-center space-x-3 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full py-5 px-8 rounded-xl font-semibold text-lg flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed border border-[#2d2c2a]"
             >
               {isLoading ? (
                 <>
@@ -91,10 +91,10 @@ export default function CreateRoom() {
                 </>
               ) : (
                 <>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6" fill="none" stroke="#2d2c2a" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  <span>Create Room</span>
+                  <span className="text-[#2d2c2a]">Create Room</span>
                 </>
               )}
             </button>
