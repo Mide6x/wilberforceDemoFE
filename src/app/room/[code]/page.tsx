@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { io, Socket } from 'socket.io-client';
 import { Transcript, SUPPORTED_LANGUAGES, SupportedLanguage } from '../../../types';
 import { api, ApiError } from '@/lib/api';
+import jsPDF from 'jspdf';
 
 export default function RoomPage() {
   const params = useParams();
@@ -260,6 +261,77 @@ export default function RoomPage() {
     URL.revokeObjectURL(url);
   };
 
+  const downloadTranscriptPDF = () => {
+    const doc = new jsPDF();
+    
+    // Set document properties
+    doc.setProperties({
+      title: `Sermon Transcript - Room ${roomCode}`,
+      subject: 'Wilberforce Academy Creative Night Transcript',
+      author: 'Wilberforce Academy',
+      creator: 'Wilberforce Academy Transcription System'
+    });
+    
+    // Add header
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Wilberforce Academy Creative Night', 20, 20);
+    
+    doc.setFontSize(16);
+    doc.text('Sermon Transcript', 20, 30);
+    
+    // Add metadata
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Room Code: ${roomCode}`, 20, 45);
+    doc.text(`Language: ${SUPPORTED_LANGUAGES[role === 'listener' ? language : 'en']}`, 20, 52);
+    doc.text(`Downloaded: ${new Date().toLocaleString()}`, 20, 59);
+    
+    // Add separator line
+    doc.line(20, 65, 190, 65);
+    
+    // Add transcripts
+    let yPosition = 75;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
+    const lineHeight = 7;
+    
+    transcripts.forEach((transcript, index) => {
+      const text = role === 'listener' && transcript.translated_text ? transcript.translated_text : transcript.original_text;
+      const timestamp = new Date(transcript.created_at).toLocaleTimeString();
+      
+      // Check if we need a new page
+      if (yPosition > pageHeight - 40) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      
+      // Add timestamp
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text(`[${timestamp}]`, margin, yPosition);
+      
+      // Add transcript text with word wrapping
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(11);
+      const splitText = doc.splitTextToSize(text, 150);
+      
+      splitText.forEach((line: string) => {
+        if (yPosition > pageHeight - 30) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        doc.text(line, margin, yPosition + 10);
+        yPosition += lineHeight;
+      });
+      
+      yPosition += 5; // Extra space between transcripts
+    });
+    
+    // Save the PDF
+    doc.save(`sermon-transcript-${roomCode}-${language}.pdf`);
+  };
+
   if (roomExists === false) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center p-4">
@@ -349,32 +421,32 @@ export default function RoomPage() {
                 </p>
               </div>
               
-              <div className="flex space-x-3">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                 {!isRecording ? (
                   <button
                     onClick={startRecording}
-                    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center space-x-2"
+                    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors flex items-center justify-center space-x-2 touch-manipulation"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
                     </svg>
-                    <span>Start Recording</span>
+                    <span className="text-sm sm:text-base">Start Recording</span>
                   </button>
                 ) : (
                   <button
                     onClick={stopRecording}
-                    className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center space-x-2"
+                    className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors flex items-center justify-center space-x-2 touch-manipulation"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M6 6h12v12H6z"/>
                     </svg>
-                    <span>Stop Recording</span>
+                    <span className="text-sm sm:text-base">Stop Recording</span>
                   </button>
                 )}
                 
                 <button
                   onClick={endRoom}
-                  className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors touch-manipulation text-sm sm:text-base"
                 >
                   End Room
                 </button>
@@ -394,24 +466,24 @@ export default function RoomPage() {
               
               {/* Download buttons - show when room ended or for listeners with transcripts */}
               {(roomEnded || (role === 'listener' && transcripts.length > 0)) && (
-                <div className="flex space-x-2">
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                   <button
-                    onClick={downloadTranscript}
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors flex items-center space-x-2"
-                    title="Download as text file"
+                    onClick={downloadTranscriptPDF}
+                    className="bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors flex items-center justify-center space-x-2 touch-manipulation"
+                    title="Download as PDF file"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span>Download TXT</span>
+                    <span>Download PDF</span>
                   </button>
                   
                   <button
                     onClick={downloadTranscriptJSON}
-                    className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors flex items-center space-x-2"
+                    className="bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors flex items-center justify-center space-x-2 touch-manipulation"
                     title="Download as JSON file with metadata"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                     <span>Download JSON</span>
