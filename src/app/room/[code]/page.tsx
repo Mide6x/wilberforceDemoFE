@@ -301,15 +301,16 @@ export default function RoomPage() {
       const timestamp = new Date(transcript.created_at).toLocaleTimeString();
       
       // Check if we need a new page
-      if (yPosition > pageHeight - 40) {
+      if (yPosition > pageHeight - 50) {
         doc.addPage();
         yPosition = 20;
       }
       
-      // Add timestamp
+      // Add timestamp on its own line
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
       doc.text(`[${timestamp}]`, margin, yPosition);
+      yPosition += 12; // Move down for transcript text
       
       // Add transcript text with word wrapping
       doc.setFont('helvetica', 'normal');
@@ -321,11 +322,11 @@ export default function RoomPage() {
           doc.addPage();
           yPosition = 20;
         }
-        doc.text(line, margin, yPosition + 10);
+        doc.text(line, margin, yPosition);
         yPosition += lineHeight;
       });
       
-      yPosition += 5; // Extra space between transcripts
+      yPosition += 8; // Extra space between transcripts
     });
     
     // Save the PDF
