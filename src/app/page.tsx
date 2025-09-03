@@ -68,8 +68,8 @@ export default function Home() {
           </div>
 
           <div className="text-center border-t pt-5 sm:pt-6">
-            <p className="font-medium mb-2 text-sm sm:text-base" style={{color: '#ffffff'}}>How it works</p>
-            <p className="text-xs sm:text-sm leading-relaxed px-2" style={{color: '#ffffff'}}>
+            <p className="font-medium mb-2 text-sm sm:text-base" style={{color: '#2d2c2a'}}>How it works</p>
+            <p className="text-xs sm:text-sm leading-relaxed px-2" style={{color: '#2d2c2a'}}>
               Preachers create rooms and share codes with listeners for real-time transcription in multiple languages
             </p>
           </div>
