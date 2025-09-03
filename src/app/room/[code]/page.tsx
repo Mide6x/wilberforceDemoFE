@@ -99,9 +99,57 @@ export default function RoomPage() {
     };
   }, [roomCode, language, roomExists]);
 
-  // Audio recording using MediaRecorder for OpenAI Whisper processing
+  // Audio recording with fallback for iOS/Safari compatibility
   const startRecording = async () => {
     try {
+      // Try Web Speech API first (Chrome/Edge)
+      if (('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        
+        recognition.onstart = () => {
+          setIsRecording(true);
+          if (socket) {
+            socket.emit('start-transcription', { roomCode });
+          }
+        };
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        recognition.onresult = (event: any) => {
+          let finalTranscript = '';
+          
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
+            }
+          }
+          
+          if (finalTranscript && socket) {
+            socket.emit('transcript-text', { roomCode, text: finalTranscript });
+          }
+        };
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setError(`Speech recognition error: ${event.error}`);
+        };
+        
+        recognition.onend = () => {
+          setIsRecording(false);
+        };
+        
+        mediaRecorderRef.current = recognition;
+        recognition.start();
+        return;
+      }
+      
+      // Fallback to MediaRecorder for iOS/Safari and other browsers
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
@@ -115,7 +163,7 @@ export default function RoomPage() {
       
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0 && socket) {
-          // Convert blob to array buffer and send to server for Whisper processing
+          // Convert blob to array buffer and send to server
           event.data.arrayBuffer().then(buffer => {
             socket.emit('audio-chunk', { roomCode, audioData: buffer });
           });
@@ -132,13 +180,9 @@ export default function RoomPage() {
       mediaRecorder.onstop = () => {
         setIsRecording(false);
         stream.getTracks().forEach(track => track.stop());
-        if (socket) {
-          socket.emit('end-transcription', { roomCode });
-        }
       };
       
-      // Send audio chunks every 2 seconds for real-time processing
-      mediaRecorder.start(2000);
+      mediaRecorder.start(1000); // Send chunks every second
       
     } catch (error) {
       console.error('Recording error:', error);
