@@ -51,16 +51,16 @@ export default function JoinRoom() {
                 </svg>
               </div>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold mb-2" style={{color: '#ffffff'}}>
+            <h1 className="text-xl sm:text-2xl font-bold mb-2" style={{color: '#2d2c2a'}}>
               Join a Room
             </h1>
-            <p className="text-sm sm:text-base px-2" style={{color: '#ffffff'}}>
+            <p className="text-sm sm:text-base px-2" style={{color: '#2d2c2a'}}>
               Enter the room code to listen to the sermon
             </p>
           </div>
           <form onSubmit={handleJoinRoom} className="space-y-5 sm:space-y-6">
               <div>
-                <label htmlFor="roomCode" className="block text-sm font-medium mb-2" style={{color: '#ffffff'}}>
+                <label htmlFor="roomCode" className="block text-sm font-medium mb-2" style={{color: '#2d2c2a'}}>
                   Room Code
                 </label>
                 <input
@@ -78,7 +78,7 @@ export default function JoinRoom() {
               </div>
 
               <div>
-                <label htmlFor="language" className="block text-sm font-medium mb-2" style={{color: '#ffffff'}}>
+                <label htmlFor="language" className="block text-sm font-medium mb-2" style={{color: '#2d2c2a'}}>
                   Preferred Language
                 </label>
                 <SearchableDropdown
@@ -91,7 +91,7 @@ export default function JoinRoom() {
                   placeholder="Search and select your language..."
                   className="w-full"
                 />
-                <p className="text-xs mt-2 px-1" style={{color: '#ffffff'}}>
+                <p className="text-xs mt-2 px-1" style={{color: '#2d2c2a'}}>
                   The sermon will be translated to your selected language
                 </p>
               </div>
@@ -132,7 +132,7 @@ export default function JoinRoom() {
             </form>
             
             <div className="mt-6 pt-5 border-t">
-              <div className="text-center text-xs sm:text-sm" style={{color: '#ffffff'}}>
+              <div className="text-center text-xs sm:text-sm" style={{color: '#2d2c2a'}}>
                 <p className="font-medium mb-2">Need help?</p>
                 <ul className="text-xs space-y-1 px-2">
                   <li>• Ask the preacher for the room code</li>
