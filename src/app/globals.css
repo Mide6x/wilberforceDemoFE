@@ -1,32 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  /* Wilberforce-inspired color palette */
+  /* Wilberforce Academy Creative Night color palette */
   --background: #f3fad7;
   --foreground: #1a1a1a;
-  --primary: #2c3e50;
-  --secondary: #34495e;
-  --accent: #e74c3c;
-  --muted: #95a5a6;
-  --border: #ecf0f1;
+  --primary: #22c55e;
+  --secondary: #3b82f6;
+  --accent: #10b981;
+  --muted: #6b7280;
+  --border: #e5e7eb;
   --card: #ffffff;
-  --card-foreground: #2c3e50;
+  --card-foreground: #374151;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0f1419;
     --foreground: #f8f9fa;
-    --primary: #4a90e2;
-    --secondary: #6c7b7f;
-    --accent: #ff6b6b;
-    --muted: #6c757d;
-    --border: #2d3748;
-    --card: #1a202c;
-    --card-foreground: #f8f9fa;
+    --primary: #22c55e;
+    --secondary: #3b82f6;
+    --accent: #10b981;
+    --muted: #9ca3af;
+    --border: #374151;
+    --card: #1f2937;
+    --card-foreground: #f9fafb;
   }
 }
 
+/* Mobile-first base styles */
 body {
   background: var(--background);
   color: var(--foreground);
@@ -35,50 +39,137 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  font-size: 16px;
+  /* Prevent zoom on iOS */
+  -webkit-text-size-adjust: 100%;
+  /* Improve touch targets */
+  touch-action: manipulation;
 }
 
-/* Wilberforce-inspired typography */
+/* Mobile-first typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.2;
+  margin: 0;
 }
 
-/* Enhanced button styles */
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  border: none;
-  color: white;
-  font-weight: 500;
-  letter-spacing: 0.025em;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Wilberforce Academy Creative Night theme */
+.wilberforce-gradient {
+  background: linear-gradient(135deg, #f3fad7 0%, #e8f5e8 50%, #f0f8f0 100%);
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
 }
 
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(44, 62, 80, 0.2);
-}
-
-/* Card enhancements */
-.card {
+.wilberforce-card {
   background: var(--card);
   border: 1px solid var(--border);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+.wilberforce-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Elegant gradients */
-.gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Mobile-optimized button styles */
+.wilberforce-btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Improve touch targets */
+  min-height: 44px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.wilberforce-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+.wilberforce-btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+  
+  /* Improve touch targets on mobile */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+  
+  /* Prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  body {
+    font-size: 15px;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
