@@ -11,6 +11,25 @@ export default function Home() {
     setShowSplash(false);
   };
 
+  // Warm up the server on page load
+  useEffect(() => {
+    const warmUpServer = async () => {
+      try {
+        // Ping the server to wake it up from cold start
+        await fetch('https://wilberforcedemobe.onrender.com/api/health', {
+          method: 'GET',
+          mode: 'cors',
+        });
+        console.log('Server warm-up ping sent');
+      } catch (error) {
+        console.log('Server warm-up ping failed:', error);
+        // Silently fail - this is just for optimization
+      }
+    };
+
+    warmUpServer();
+  }, []);
+
   if (showSplash) {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
