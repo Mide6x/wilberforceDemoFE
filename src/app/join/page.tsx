@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../../types';
+import SearchableDropdown from '../../components/SearchableDropdown';
 
 export default function JoinRoom() {
   const [roomCode, setRoomCode] = useState('');
@@ -73,18 +74,16 @@ export default function JoinRoom() {
               <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-2">
                 Preferred Language
               </label>
-              <select
-                id="language"
+              <SearchableDropdown
+                options={Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => ({
+                  value: code,
+                  label: name
+                }))}
                 value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value as SupportedLanguage)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
-              >
-                {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setSelectedLanguage(value as SupportedLanguage)}
+                placeholder="Search and select your language..."
+                className="w-full"
+              />
               <p className="text-xs text-gray-500 mt-1">
                 The sermon will be translated to your selected language
               </p>
